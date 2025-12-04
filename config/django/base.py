@@ -17,9 +17,8 @@ CORS_ALLOWED_ORIGINS = env.list("DJANGO_CORS_ORIGIN_WHITELIST", default=[])
 # Application definition
 LOCAL_APPS = [
     "core.api.apps.ApiConfig",
-    "core.authentication.apps.AuthenticationConfig",
     "core.users.apps.UsersConfig",
-    "core.documents.apps.DocumentsConfig",
+    "core.analytics.apps.AnalyticsConfig",
 ]
 
 THIRD_PARTY_APPS: list[str] = [
@@ -28,7 +27,6 @@ THIRD_PARTY_APPS: list[str] = [
     "django_extensions",
     "django_filters",
     "rest_framework",
-    "rest_framework_simplejwt",
 ]
 
 INSTALLED_APPS: list[str] = [
@@ -54,7 +52,6 @@ MIDDLEWARE: list[str] = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "easyaudit.middleware.easyaudit.EasyAuditMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -120,9 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "users.User"
 
-# API_AUTH_TYPE = "JWT" or "SESSION"
-API_AUTH_TYPE = "JWT"
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -147,30 +141,15 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "core.api.exception_handler.drf_exception_handler",
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_RENDERER_CLASSES": ("core.api.renderers.CustomJSONRenderer",),
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
 }
 
 APP_DOMAIN = env("APP_DOMAIN", default="http://localhost:8000")  # type: ignore
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "guardian.backends.ObjectPermissionBackend",
-)
-
-ANONYMOUS_USER_NAME = None
-GUARDIAN_GET_CONTENT_TYPE = "polymorphic.contrib.guardian.get_polymorphic_base_content_type"
-
-SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"},
-    },
-}
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 
 from config.settings.logging import *  # noqa
 from config.settings.cors import *  # noqa
