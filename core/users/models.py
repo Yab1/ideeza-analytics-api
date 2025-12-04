@@ -3,7 +3,6 @@ from django.contrib.auth.models import BaseUserManager as BUM  # noqa: N817
 from django.db import models
 
 from core.common.models import BaseModel
-from core.documents.selectors import document_get_by_entity
 
 
 class BaseUserManager(BUM):
@@ -46,6 +45,14 @@ class User(BaseUser, AbstractUser, PermissionsMixin):
     username = None
     email = models.EmailField(blank=False, max_length=255, unique=True)
     phone_number = models.PositiveBigIntegerField(unique=True)
+    country = models.ForeignKey(
+        "analytics.Country",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="users",
+        db_index=True,
+    )
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -67,12 +74,3 @@ class User(BaseUser, AbstractUser, PermissionsMixin):
     @property
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
-
-    @property
-    def profile_picture(self) -> str:
-        documents = document_get_by_entity(entity_type=self, entity_id=self.id)
-
-        if documents.exists():
-            return documents.first().document_full_path
-
-        return None
