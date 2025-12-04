@@ -1,70 +1,56 @@
-# Django App Template
+# IDEEZA Analytics API
 
-This repository serves as a template for quickly setting up Django applications. It includes a variety of pre-configured features and tools to streamline development.
+Backend API for analytics-focused endpoints with efficient aggregation, dynamic filtering, and optimized performance.
 
-## Features
+## Tech Stack
 
-- **Docker Compose**: Easily manage your PostgreSQL database with Docker.
-- **Authentication**: Pre-configured authentication setup for secure user management.
-- **Django REST Framework**: Build powerful APIs with ease.
-- **DRF Spectacular**: Automatically generate OpenAPI schema for your APIs.
-- **Django Guardian**: Implement object-level permissions.
-- **Django Easy Audit**: Track changes in your models with audit logging.
-- **Inspired by Hacksoft Django Style Guide**: Follow best practices and coding standards.
+- **Django 5.2**: Web framework
+- **Django REST Framework**: REST API framework
+- **PostgreSQL**: Database
+- **Docker Compose**: Development environment
+- **uv**: Fast Python package manager
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
-- Python 3.12+ (for local development).
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [uv](https://github.com/astral-sh/uv) package manager
+- Python 3.12+
 
 ### Setup
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/django-app-template.git
-    cd django-app-template
-    ```
-2. **Create a logs directory:**
-    ```bash
-    mkdir logs
-    ```
-3. **Install Python dependencies:**
-    ```bash
-    make install-all-requirements
-    ```
-4. **Copy the environment file:**
-    ```bash
-    cp .env.example .env
-    ```
-5. **Start the Docker containers:**
-    ```bash
-    docker-compose up -d
-    ```
-6. **Run migrations:**
-    ```bash
-    make migrate
-    ```
-7. **Create a superuser (optional):**
-    ```bash
-    make superuser
-    ```
-8. **Access the development server:**
-   Visit `http://localhost:8000` in your web browser.
-
-## Usage
-
-- Use the Django admin interface for managing users and models.
-- Access your API endpoints via the `/api/` path.
-- Generate the API schema with:
-    ```bash
-    make generate-schema
+    git clone <repository-url>
+    cd ideeza-analytics-api
     ```
 
-## Contributing
+2. **Install dependencies:**
+    ```bash
+    make install
+    ```
 
-Feel free to make improvements or add features! Please submit a pull request for any major changes.
+3. **Start Docker services:**
+    ```bash
+    docker-compose -f docker/development/docker-compose.yml up -d
+    ```
+
+4. **Run migrations:**
+    ```bash
+    uv run python manage.py migrate
+    ```
+
+5. **Start development server:**
+    ```bash
+    uv run python manage.py runserver 8001
+    ```
+
+## Development
+
+- API endpoints are available at `/api/`
+- API documentation available at `/swagger/`
+- Development server runs on `http://localhost:8001`
 
 ## License
 
