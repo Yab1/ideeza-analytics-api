@@ -45,3 +45,82 @@ precommit: ## Install and configure pre-commit hooks
 	uv run pre-commit uninstall || true
 	uv run pre-commit install
 	$(call ok,Pre-commit hooks installed)
+
+# ==============================================================================
+# Django Management
+# ==============================================================================
+.PHONY: run migrate makemigrate dry-migrate shell superuser seed-superuser collectstatic flush seed-patients django-check migrations
+
+# ==============================================================================
+# Server & Development
+# ==============================================================================
+run: ## Run Django server
+	$(call title,Running server on DJANGO_PORT $(DJANGO_PORT))
+	$(MANAGE) runserver $(DJANGO_PORT)
+
+shell: ## Open Django shell
+	$(MANAGE) shell
+
+django-check: ## Check Django health and perform checks
+	$(MANAGE) check
+
+# ==============================================================================
+# Migrations
+# ==============================================================================
+migrations: ## Create migrations
+	$(MANAGE) makemigrations
+
+migrate: ## Apply migrations
+	$(MANAGE) migrate
+
+makemigrate: ## Create and apply migrations
+	$(MANAGE) makemigrations
+	$(MANAGE) migrate
+
+dry-migrate: ## Dry run migrations
+	$(MANAGE) makemigrations --dry-run 2>&1 | head -20
+
+# ==============================================================================
+# User Management
+# ==============================================================================
+superuser: ## Create superuser
+	$(MANAGE) createsuperuser
+
+seed-superuser: ## Load superusers from YAML secrets file (use --update to update existing)
+	$(call title,Loading superusers from secrets file)
+	$(MANAGE) load_superusers $(if $(UPDATE),--update,)
+
+# ==============================================================================
+# Static Files
+# ==============================================================================
+collectstatic: ## Collect static files
+	$(MANAGE) collectstatic --noinput
+
+
+# ==============================================================================
+# Miscellaneous
+# ==============================================================================
+.PHONY: clean-migrations format lint demo-logging create-app loaddata loaddata-all
+
+clean-migrations: ## Remove migration files
+	find core -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	find core -path "*/migrations/*.pyc" -delete
+	$(call ok,Migrations cleaned)
+
+format: ## Format code with ruff
+	$(call title,Formatting code)
+	uv run ruff format .
+	$(call ok,Code formatted)
+
+lint: format ## Run linters (includes formatting)
+	$(call title,Running linters)
+	@echo "Running ruff check on all Python files..."
+	uv run ruff check . --fix
+	@echo "Running other pre-commit hooks..."
+	uv run pre-commit run --all-files check-yaml
+	uv run pre-commit run --all-files check-added-large-files
+	$(call ok,Linting complete)
+
+load-fixtures: ## Load all fixtures
+	$(MANAGE) loaddata $(shell find core -type f -path "*/fixtures/*" \( -name '*.json' -o -name '*.yaml' \))
+
