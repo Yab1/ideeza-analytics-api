@@ -1,7 +1,5 @@
 import logging
 
-from django.urls import include, path
-
 logger = logging.getLogger("configuration")
 
 
@@ -77,6 +75,6 @@ class DebugToolbarSetup:
         if not show_toolbar():
             return urlpatterns
 
-        import debug_toolbar  # noqa
+        from debug_toolbar.toolbar import debug_toolbar_urls
 
-        return urlpatterns + [path("__debug__/", include(debug_toolbar.urls))]
+        return urlpatterns + debug_toolbar_urls()

@@ -1,7 +1,12 @@
 from config.env import env
 
 DEBUG_TOOLBAR_ENABLED = env.bool("DEBUG_TOOLBAR_ENABLED", default=True)  # type: ignore
-DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": "config.settings.debug_toolbar.setup.show_toolbar"}
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": "config.settings.debug_toolbar.setup.show_toolbar",
+    "DISABLE_PANELS": {
+        "debug_toolbar.panels.history.HistoryPanel",
+    },
+}
 
 # You can place additional settings below
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html

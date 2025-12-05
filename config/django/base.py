@@ -1,6 +1,10 @@
+import mimetypes
 import os
 
 from config.env import APPS_DIR, BASE_DIR, env
+
+# Fix MIME type for JavaScript files (required for Django Debug Toolbar)
+mimetypes.add_type("application/javascript", ".js", True)
 
 env.read_env(os.path.join(BASE_DIR, ".env"))
 
@@ -13,6 +17,11 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.
 CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=[])
 
 CORS_ALLOWED_ORIGINS = env.list("DJANGO_CORS_ORIGIN_WHITELIST", default=[])
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "localhost",
+]
 
 # Application definition
 LOCAL_APPS = [
@@ -157,4 +166,4 @@ from config.settings.cors import *  # noqa
 from config.settings.debug_toolbar.settings import *  # noqa
 from config.settings.debug_toolbar.setup import DebugToolbarSetup  # noqa
 
-INSTALLED_APPS, MIDDLEWARE = DebugToolbarSetup.do_settings(INSTALLED_APPS, MIDDLEWARE)
+INSTALLED_APPS, MIDDLEWARE = DebugToolbarSetup.do_settings(INSTALLED_APPS, MIDDLEWARE, middleware_position=3)
