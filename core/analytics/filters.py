@@ -27,31 +27,32 @@ class DynamicFilterBuilder:
         if not filter_dict:
             return Q()
 
-        q_objects = Q()
-
+        # Handle logical operators (and, or, not) - these are mutually exclusive at top level
         if "and" in filter_dict:
             and_q = Q()
             for condition in filter_dict["and"]:
                 and_q &= cls.build(condition)
-            q_objects &= and_q
+            return and_q
 
         if "or" in filter_dict:
             or_q = Q()
             for condition in filter_dict["or"]:
                 or_q |= cls.build(condition)
-            q_objects |= or_q
+            return or_q
 
         if "not" in filter_dict:
             not_q = Q()
             for condition in filter_dict["not"]:
                 not_q |= cls.build(condition)
-            q_objects &= ~not_q
+            return ~not_q
 
+        # Handle field-based conditions
         if "field" in filter_dict:
             field = filter_dict["field"]
             for op, func in cls.OPERATORS.items():
                 if op in filter_dict:
                     value = filter_dict[op]
-                    q_objects &= func(field, value)
+                    return func(field, value)
 
-        return q_objects
+        # If no recognized structure, return empty Q
+        return Q()
