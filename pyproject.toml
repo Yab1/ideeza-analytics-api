@@ -14,7 +14,8 @@ dependencies = [
     "django-cors-headers==4.9.0",
     "django-extensions==4.1",
     "gunicorn==23.0.0",
-		"setuptools==80.9.0",
+    "uvicorn[standard]==0.34.0",
+    "setuptools==80.9.0",
 ]
 
 [project.optional-dependencies]

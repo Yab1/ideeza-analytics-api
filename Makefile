@@ -124,3 +124,26 @@ lint: format ## Run linters (includes formatting)
 load-fixtures: ## Load all fixtures
 	$(MANAGE) loaddata $(shell find core -type f -path "*/fixtures/*" \( -name '*.json' -o -name '*.yaml' \))
 
+# ==============================================================================
+# Docker Orchestration
+# ==============================================================================
+.PHONY: docker docker-up docker-down docker-restart docker-ps docker-deploy
+
+docker: ## Start Docker stack (ENV=local|production, default: production)
+	@./scripts/docker-orchestrate.sh $(ENV)
+
+docker-up: ## Start Docker stack (ENV=local|production, default: production)
+	@./scripts/docker-orchestrate.sh $(ENV)
+
+docker-down: ## Stop Docker stack (ENV=local|production, default: production)
+	@./scripts/docker-orchestrate.sh $(ENV) down
+
+docker-restart: ## Restart Docker stack (ENV=local|production, default: production)
+	@./scripts/docker-orchestrate.sh $(ENV) restart
+
+docker-ps: ## Show Docker stack status (ENV=local|production, default: production)
+	@./scripts/docker-orchestrate.sh $(ENV) ps
+
+docker-deploy: ## Deploy with Jenkins-style env handling (ENV=local|production, default: production)
+	@./scripts/docker-orchestrate.sh $(ENV) deploy
+
