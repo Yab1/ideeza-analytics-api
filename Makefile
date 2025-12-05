@@ -121,29 +121,25 @@ lint: format ## Run linters (includes formatting)
 	uv run pre-commit run --all-files check-added-large-files
 	$(call ok,Linting complete)
 
-load-fixtures: ## Load all fixtures
-	$(MANAGE) loaddata $(shell find core -type f -path "*/fixtures/*" \( -name '*.json' -o -name '*.yaml' \))
+load-fixtures: ## Load all fixtures in correct dependency order
+	$(MANAGE) loaddata \
+		core/analytics/fixtures/country/country \
+		core/users/fixtures/user/baseuser \
+		core/users/fixtures/user/user \
+		core/analytics/fixtures/blog/blog \
+		core/analytics/fixtures/blogview/blogview
 
 # ==============================================================================
 # Docker Orchestration
 # ==============================================================================
-.PHONY: docker docker-up docker-down docker-restart docker-ps docker-deploy
+.PHONY: docker-up docker-up-detached
 
-docker: ## Start Docker stack (ENV=local|production, default: production)
-	@./scripts/docker-orchestrate.sh $(ENV)
+docker-up: ## Start Docker containers (attached - shows logs)
+	$(call title,Starting Docker containers in attached mode)
+	docker compose up
 
-docker-up: ## Start Docker stack (ENV=local|production, default: production)
-	@./scripts/docker-orchestrate.sh $(ENV)
-
-docker-down: ## Stop Docker stack (ENV=local|production, default: production)
-	@./scripts/docker-orchestrate.sh $(ENV) down
-
-docker-restart: ## Restart Docker stack (ENV=local|production, default: production)
-	@./scripts/docker-orchestrate.sh $(ENV) restart
-
-docker-ps: ## Show Docker stack status (ENV=local|production, default: production)
-	@./scripts/docker-orchestrate.sh $(ENV) ps
-
-docker-deploy: ## Deploy with Jenkins-style env handling (ENV=local|production, default: production)
-	@./scripts/docker-orchestrate.sh $(ENV) deploy
+docker-up-detached: ## Start Docker containers in detached mode (background)
+	$(call title,Starting Docker containers in detached mode)
+	docker compose up -d
+	$(call ok,Docker containers started)
 

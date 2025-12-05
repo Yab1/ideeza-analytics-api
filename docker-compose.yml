@@ -1,0 +1,54 @@
+services:
+  # PostgreSQL service
+  analytics_api_postgres:
+    image: postgres:18
+    container_name: analytics_api_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-analytics_db}
+      POSTGRES_USER: ${DB_USER:-analytics_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-analytics_password}
+    ports:
+      - "5433:5432"
+    volumes:
+      - analytics_api_postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USER:-analytics_user} -d ${DB_NAME:-analytics_db}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - analytics_api_network
+
+  # Django application service
+  analytics_api:
+    container_name: analytics_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DB_NAME: ${DB_NAME:-analytics_db}
+      DB_USER: ${DB_USER:-analytics_user}
+      DB_PASSWORD: ${DB_PASSWORD:-analytics_password}
+      DB_HOST: ${DB_HOST:-analytics_api_postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      PORT: 8001
+    depends_on:
+      analytics_api_postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - analytics_api_network
+
+volumes:
+  analytics_api_postgres_data:
+
+networks:
+  analytics_api_network:
+    name: analytics_api_network
