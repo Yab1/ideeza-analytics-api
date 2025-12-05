@@ -103,6 +103,25 @@ DATABASES = {
         "PASSWORD": env.str("DB_PASSWORD"),
         "HOST": env.str("DB_HOST"),
         "PORT": env.str("DB_PORT", default="5432"),
+        "CONN_MAX_AGE": 600,  # Reuse connections for 10 minutes
+        "OPTIONS": {
+            "connect_timeout": 10,
+        },
+    },
+}
+
+# Cache configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",  # For development
+        # For production, use Redis:
+        # "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        # "LOCATION": env("REDIS_URL", default="redis://127.0.0.1:6379/1"),
+        "OPTIONS": {
+            "MAX_ENTRIES": 1000,
+        },
+        "KEY_PREFIX": "analytics",
+        "TIMEOUT": 300,  # 5 minutes default
     },
 }
 

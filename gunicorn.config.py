@@ -5,7 +5,10 @@ bind = "0.0.0.0:8001"
 backlog = 1024
 
 # Worker processes
-workers = 2
+import multiprocessing  # noqa: E402
+
+workers = (multiprocessing.cpu_count() * 2) + 1  # Recommended formula
+# For development, you can set explicitly: workers = 4
 worker_class = "uvicorn.workers.UvicornWorker"
 worker_connections = 500
 max_requests = 1000

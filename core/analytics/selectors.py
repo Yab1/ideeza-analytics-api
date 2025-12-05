@@ -1,5 +1,8 @@
+import hashlib
+import json
 from typing import Any, Dict, List, Literal
 
+from django.core.cache import cache
 from django.db.models import Count
 from django.db.models.functions import TruncDay, TruncMonth, TruncWeek, TruncYear
 
@@ -27,7 +30,7 @@ def blog_views_get_grouped_metrics(
     Returns:
         List of dicts with keys: x (grouping key), y (number of blogs), z (total views)
     """
-    queryset = BlogView.objects.select_related("blog", "viewer_user", "viewer_country")
+    queryset = BlogView.objects.all()
 
     if filters:
         q_filter = DynamicFilterBuilder.build(filters)
@@ -111,7 +114,19 @@ def top_get_ranked(
     from django.utils import timezone
     from django.utils.dateparse import parse_datetime
 
-    queryset = BlogView.objects.select_related("blog", "viewer_user", "viewer_country")
+    # Create cache key
+    cache_data = f"{top_type}_{start_date}_{end_date}_{json.dumps(filters or {}, sort_keys=True)}"
+    cache_key = f"top_ranked_{hashlib.md5(cache_data.encode()).hexdigest()}"
+
+    # Try cache first (fail silently if cache is unavailable)
+    try:
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return cached
+    except Exception:
+        pass  # Continue without cache if there's an error
+
+    queryset = BlogView.objects.all()
 
     if start_date:
         if "T" not in start_date:
@@ -191,10 +206,16 @@ def top_get_ranked(
         formatted_results = []
         for result in results:
             formatted_results.append({
-                "x": result["x"],
+                "x": result["blog__title"],
                 "y": result["y"],
                 "z": result["z"],
             })
+
+    # Cache result for 5 minutes (fail silently if cache is unavailable)
+    try:
+        cache.set(cache_key, formatted_results, timeout=300)
+    except Exception:
+        pass  # Continue without caching if there's an error
 
     return formatted_results
 
@@ -218,7 +239,7 @@ def performance_get_time_series(
     """
     from datetime import datetime
 
-    queryset = BlogView.objects.select_related("blog", "blog__user", "viewer_user", "viewer_country")
+    queryset = BlogView.objects.all()
 
     if user_id:
         queryset = queryset.filter(blog__user_id=user_id)

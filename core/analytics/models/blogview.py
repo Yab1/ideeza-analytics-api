@@ -40,6 +40,11 @@ class BlogView(BaseModel):
             models.Index(fields=["viewer_user", "blog"]),
             models.Index(fields=["viewer_country", "blog"]),
             models.Index(fields=["viewer_user", "viewer_country", "-viewed_at"]),
+            # Composite indexes for aggregation queries
+            models.Index(fields=["viewer_country", "viewed_at", "blog"]),
+            models.Index(fields=["viewer_user", "viewed_at", "blog"]),
+            models.Index(fields=["blog", "viewed_at", "viewer_user"]),
+            models.Index(fields=["blog", "viewed_at", "viewer_country"]),
         ]
 
     def __str__(self) -> str:
