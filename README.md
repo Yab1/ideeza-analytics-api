@@ -32,23 +32,26 @@ Backend API for analytics-focused endpoints with efficient aggregation, dynamic 
 ### Quick Start with Docker
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd ideeza-analytics-api
    ```
 
 2. **Create `.env` file:**
+
    ```bash
    # Copy and configure your environment variables
    # See .env.example or configure:
    DB_NAME=analysis
-   DB_USER=tilla_admin
-   DB_PASSWORD=tilla_secure_2025
-   DB_HOST=analytics_api_postgres  # Use service name in Docker
+   DB_USER=analytics_user
+   DB_PASSWORD=analytics_password
+   DB_HOST=analytics_api_postgres  
    DB_PORT=5432
    ```
 
 3. **Start Docker services:**
+
    ```bash
    # Start in detached mode (background)
    make docker-up-detached
@@ -71,11 +74,13 @@ Backend API for analytics-focused endpoints with efficient aggregation, dynamic 
 ### Local Development (without Docker)
 
 1. **Install dependencies:**
+
    ```bash
    make install
    ```
 
 2. **Configure database in `.env`:**
+
    ```bash
    DB_HOST=localhost  # or your database host
    DB_PORT=5432
@@ -83,16 +88,19 @@ Backend API for analytics-focused endpoints with efficient aggregation, dynamic 
    ```
 
 3. **Run migrations:**
+
    ```bash
    make migrate
    ```
 
 4. **Load fixtures:**
+
    ```bash
    make load-fixtures
    ```
 
 5. **Start development server:**
+
    ```bash
    make run
    ```
@@ -106,16 +114,19 @@ All endpoints are available under `/api/v1/analytics/`:
 Get grouped blog view metrics by country or user.
 
 **Query Parameters:**
+
 - `object_type` (required): `country` or `user`
 - `range` (required): `month`, `week`, or `year`
 - `filters` (optional): JSON string for dynamic filtering
 
 **Example:**
+
 ```bash
 GET /api/v1/analytics/blog-views/?object_type=country&range=month
 ```
 
 **Response:**
+
 ```json
 [
   {
@@ -131,17 +142,20 @@ GET /api/v1/analytics/blog-views/?object_type=country&range=month
 Get top 10 ranked entities (users, countries, or blogs).
 
 **Query Parameters:**
+
 - `top` (required): `user`, `country`, or `blog`
 - `start_date` (optional): ISO format date (YYYY-MM-DD)
 - `end_date` (optional): ISO format date (YYYY-MM-DD)
 - `filters` (optional): JSON string for dynamic filtering
 
 **Example:**
+
 ```bash
 GET /api/v1/analytics/top/?top=user&start_date=2025-02-01&end_date=2025-02-28
 ```
 
 **Response:**
+
 ```json
 [
   {
@@ -157,16 +171,19 @@ GET /api/v1/analytics/top/?top=user&start_date=2025-02-01&end_date=2025-02-28
 Get time-series performance metrics with growth percentages.
 
 **Query Parameters:**
+
 - `compare` (required): `day`, `week`, `month`, or `year`
 - `user_id` (optional): Filter by specific user's blogs
 - `filters` (optional): JSON string for dynamic filtering
 
 **Example:**
+
 ```bash
 GET /api/v1/analytics/performance/?compare=month
 ```
 
 **Response:**
+
 ```json
 [
   {
@@ -182,6 +199,7 @@ GET /api/v1/analytics/performance/?compare=month
 All endpoints support dynamic filtering via the `filters` query parameter (JSON string).
 
 **Supported Operators:**
+
 - `eq`: equals
 - `ne`: not equals
 - `gt`: greater than
@@ -192,11 +210,13 @@ All endpoints support dynamic filtering via the `filters` query parameter (JSON 
 - `contains`: contains (case-insensitive)
 
 **Logical Operators:**
+
 - `and`: AND conditions
 - `or`: OR conditions
 - `not`: NOT conditions
 
 **Example:**
+
 ```json
 {
   "and": [
@@ -213,7 +233,8 @@ All endpoints support dynamic filtering via the `filters` query parameter (JSON 
 ```
 
 URL encoded:
-```
+
+```text
 filters=%7B%22and%22%3A%5B%7B%22field%22%3A%22viewed_at%22%2C%22gte%22%3A%222025-02-01T00%3A00%3A00Z%22%7D%5D%7D
 ```
 
@@ -239,7 +260,7 @@ make format           # Format code only
 
 ## Project Structure
 
-```
+```text
 ideeza-analytics-api/
 ├── core/
 │   ├── analytics/        # Analytics app
@@ -260,6 +281,7 @@ ideeza-analytics-api/
 ## Database
 
 The application uses PostgreSQL. When running with Docker:
+
 - Database is automatically created on first startup
 - Migrations run automatically
 - Test fixtures are loaded automatically
@@ -268,6 +290,7 @@ The application uses PostgreSQL. When running with Docker:
 ## Testing
 
 Test fixtures are included in:
+
 - `core/analytics/fixtures/` - Analytics data (countries, blogs, blog views)
 - `core/users/fixtures/` - User data
 
@@ -276,6 +299,7 @@ Fixtures are automatically loaded when starting Docker containers.
 ## API Documentation
 
 Interactive API documentation is available at:
+
 - Swagger UI: `http://localhost:8001/swagger/`
 - ReDoc: `http://localhost:8001/redoc/`
 
@@ -284,7 +308,6 @@ Interactive API documentation is available at:
 For technical questions or contributions, contact:
 
 - **Developer**: [Yeabsera](https://github.com/Yab1)
-
 
 ## License
 
