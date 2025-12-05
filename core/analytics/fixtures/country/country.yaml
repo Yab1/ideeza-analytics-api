@@ -1,0 +1,93 @@
+# Country fixtures
+# ISO 3166-1 alpha-2 country codes
+
+# United States
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440001
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: United States
+    code: US
+
+# United Kingdom
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440002
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: United Kingdom
+    code: GB
+
+# Canada
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440003
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: Canada
+    code: CA
+
+# Germany
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440004
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: Germany
+    code: DE
+
+# France
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440005
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: France
+    code: FR
+
+# Australia
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440006
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: Australia
+    code: AU
+
+# Japan
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440007
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: Japan
+    code: JP
+
+# India
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440008
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: India
+    code: IN
+
+# Brazil
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440009
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: Brazil
+    code: BR
+
+# Netherlands
+- model: analytics.country
+  pk: 550e8400-e29b-41d4-a716-446655440010
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+    name: Netherlands
+    code: NL
+

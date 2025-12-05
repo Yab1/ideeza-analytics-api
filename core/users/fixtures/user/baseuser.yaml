@@ -1,0 +1,52 @@
+# BaseUser fixtures
+# Parent model for User - must be loaded before User fixtures
+
+# BaseUser for John Doe
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440001
+  fields:
+    created_at: 2025-01-15T10:00:00Z
+    updated_at: 2025-01-15T10:00:00Z
+
+# BaseUser for Jane Smith
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440002
+  fields:
+    created_at: 2025-01-16T11:00:00Z
+    updated_at: 2025-01-16T11:00:00Z
+
+# BaseUser for Bob Johnson
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440003
+  fields:
+    created_at: 2025-01-17T12:00:00Z
+    updated_at: 2025-01-17T12:00:00Z
+
+# BaseUser for Alice Williams
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440004
+  fields:
+    created_at: 2025-01-18T13:00:00Z
+    updated_at: 2025-01-18T13:00:00Z
+
+# BaseUser for Charlie Brown
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440005
+  fields:
+    created_at: 2025-01-19T14:00:00Z
+    updated_at: 2025-01-19T14:00:00Z
+
+# BaseUser for Diana Prince
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440006
+  fields:
+    created_at: 2025-01-20T15:00:00Z
+    updated_at: 2025-01-20T15:00:00Z
+
+# BaseUser for Admin User
+- model: users.baseuser
+  pk: 660e8400-e29b-41d4-a716-446655440007
+  fields:
+    created_at: 2025-01-01T00:00:00Z
+    updated_at: 2025-01-01T00:00:00Z
+

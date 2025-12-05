@@ -1,0 +1,115 @@
+# User fixtures
+# Test users for analytics testing
+
+# John Doe - US User
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440001
+  fields:
+    email: john.doe@example.com
+    first_name: John
+    last_name: Doe
+    phone_number: 15551234567
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440001
+    is_active: true
+    is_staff: false
+    is_admin: false
+    is_superuser: false
+    date_joined: 2025-01-15T10:00:00Z
+
+# Jane Smith - UK User
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440002
+  fields:
+    email: jane.smith@example.com
+    first_name: Jane
+    last_name: Smith
+    phone_number: 441234567890
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440002
+    is_active: true
+    is_staff: false
+    is_admin: false
+    is_superuser: false
+    date_joined: 2025-01-16T11:00:00Z
+
+# Bob Johnson - Canadian User
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440003
+  fields:
+    email: bob.johnson@example.com
+    first_name: Bob
+    last_name: Johnson
+    phone_number: 14161234567
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440003
+    is_active: true
+    is_staff: false
+    is_admin: false
+    is_superuser: false
+    date_joined: 2025-01-17T12:00:00Z
+
+# Alice Williams - German User
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440004
+  fields:
+    email: alice.williams@example.com
+    first_name: Alice
+    last_name: Williams
+    phone_number: 4915123456789
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440004
+    is_active: true
+    is_staff: false
+    is_admin: false
+    is_superuser: false
+    date_joined: 2025-01-18T13:00:00Z
+
+# Charlie Brown - French User
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440005
+  fields:
+    email: charlie.brown@example.com
+    first_name: Charlie
+    last_name: Brown
+    phone_number: 33123456789
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440005
+    is_active: true
+    is_staff: false
+    is_admin: false
+    is_superuser: false
+    date_joined: 2025-01-19T14:00:00Z
+
+# Diana Prince - Australian User
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440006
+  fields:
+    email: diana.prince@example.com
+    first_name: Diana
+    last_name: Prince
+    phone_number: 61234567890
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440006
+    is_active: true
+    is_staff: false
+    is_admin: false
+    is_superuser: false
+    date_joined: 2025-01-20T15:00:00Z
+
+# Admin User - US Admin
+- model: users.user
+  pk: 660e8400-e29b-41d4-a716-446655440007
+  fields:
+    email: admin@example.com
+    first_name: Admin
+    last_name: User
+    phone_number: 15559876543
+    password: !
+    country: 550e8400-e29b-41d4-a716-446655440001
+    is_active: true
+    is_staff: true
+    is_admin: true
+    is_superuser: true
+    date_joined: 2025-01-01T00:00:00Z
+

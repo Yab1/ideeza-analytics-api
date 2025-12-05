@@ -1,0 +1,103 @@
+# Blog fixtures
+# Test blogs for analytics testing
+
+# Python Programming Blog - John Doe
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440001
+  fields:
+    created_at: 2025-02-01T09:00:00Z
+    updated_at: 2025-02-01T09:00:00Z
+    title: "Introduction to Python Programming"
+    user: 660e8400-e29b-41d4-a716-446655440001
+    country: 550e8400-e29b-41d4-a716-446655440001
+
+# Django Web Development - Jane Smith
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440002
+  fields:
+    created_at: 2025-02-02T10:00:00Z
+    updated_at: 2025-02-02T10:00:00Z
+    title: "Building REST APIs with Django"
+    user: 660e8400-e29b-41d4-a716-446655440002
+    country: 550e8400-e29b-41d4-a716-446655440002
+
+# Machine Learning Basics - Bob Johnson
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440003
+  fields:
+    created_at: 2025-02-03T11:00:00Z
+    updated_at: 2025-02-03T11:00:00Z
+    title: "Getting Started with Machine Learning"
+    user: 660e8400-e29b-41d4-a716-446655440003
+    country: 550e8400-e29b-41d4-a716-446655440003
+
+# Data Science Tutorial - Alice Williams
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440004
+  fields:
+    created_at: 2025-02-04T12:00:00Z
+    updated_at: 2025-02-04T12:00:00Z
+    title: "Data Science with Python and Pandas"
+    user: 660e8400-e29b-41d4-a716-446655440004
+    country: 550e8400-e29b-41d4-a716-446655440004
+
+# React Frontend Development - Charlie Brown
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440005
+  fields:
+    created_at: 2025-02-05T13:00:00Z
+    updated_at: 2025-02-05T13:00:00Z
+    title: "Modern React Patterns and Best Practices"
+    user: 660e8400-e29b-41d4-a716-446655440005
+    country: 550e8400-e29b-41d4-a716-446655440005
+
+# Docker Containerization - Diana Prince
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440006
+  fields:
+    created_at: 2025-02-06T14:00:00Z
+    updated_at: 2025-02-06T14:00:00Z
+    title: "Docker Containers for Development"
+    user: 660e8400-e29b-41d4-a716-446655440006
+    country: 550e8400-e29b-41d4-a716-446655440006
+
+# Advanced Python Techniques - John Doe
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440007
+  fields:
+    created_at: 2025-02-10T09:00:00Z
+    updated_at: 2025-02-10T09:00:00Z
+    title: "Advanced Python: Decorators and Generators"
+    user: 660e8400-e29b-41d4-a716-446655440001
+    country: 550e8400-e29b-41d4-a716-446655440001
+
+# GraphQL API Design - Jane Smith
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440008
+  fields:
+    created_at: 2025-02-11T10:00:00Z
+    updated_at: 2025-02-11T10:00:00Z
+    title: "Designing GraphQL APIs"
+    user: 660e8400-e29b-41d4-a716-446655440002
+    country: 550e8400-e29b-41d4-a716-446655440002
+
+# Kubernetes Orchestration - Bob Johnson
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440009
+  fields:
+    created_at: 2025-02-12T11:00:00Z
+    updated_at: 2025-02-12T11:00:00Z
+    title: "Kubernetes for Microservices"
+    user: 660e8400-e29b-41d4-a716-446655440003
+    country: 550e8400-e29b-41d4-a716-446655440003
+
+# TypeScript Best Practices - Alice Williams
+- model: analytics.blog
+  pk: 770e8400-e29b-41d4-a716-446655440010
+  fields:
+    created_at: 2025-02-13T12:00:00Z
+    updated_at: 2025-02-13T12:00:00Z
+    title: "TypeScript Type Safety Patterns"
+    user: 660e8400-e29b-41d4-a716-446655440004
+    country: 550e8400-e29b-41d4-a716-446655440004
+
