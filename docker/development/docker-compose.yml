@@ -1,24 +1,24 @@
 services:
-  # PostgreSQL service
-  analytics_api_postgres_dev:
-    image: postgres:18
-    container_name: analytics_api_postgres
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "5431:5432"
-    volumes:
-      - analytics_api_postgres_data_dev:/var/lib/postgresql/data/
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: always
-    networks:
-      - analytics_api_dev_network
+  # # PostgreSQL service
+  # analytics_api_postgres_dev:
+  #   image: postgres:18
+  #   container_name: analytics_api_postgres
+  #   environment:
+  #     - POSTGRES_DB=${DB_NAME}
+  #     - POSTGRES_USER=${DB_USER}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+  #   ports:
+  #     - "5431:5432"
+  #   volumes:
+  #     - analytics_api_postgres_data_dev:/var/lib/postgresql/data/
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: always
+  #   networks:
+  #     - analytics_api_dev_network
 
   # Django application service
   analytics_api_dev:
@@ -31,6 +31,7 @@ services:
     restart: on-failure
     networks:
       - analytics_api_dev_network
+      - tena_adam_network
 
 volumes:
   analytics_api_postgres_data_dev:
@@ -39,3 +40,7 @@ volumes:
 networks:
   analytics_api_dev_network:
     name: analytics_api_dev_network
+
+  tena_adam_network:
+    name: tena_adam_network
+    external: true
