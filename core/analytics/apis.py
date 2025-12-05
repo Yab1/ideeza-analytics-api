@@ -7,7 +7,11 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.analytics.selectors import blog_views_get_grouped_metrics
+from core.analytics.selectors import (
+    blog_views_get_grouped_metrics,
+    performance_get_time_series,
+    top_get_ranked,
+)
 
 
 class BlogViewsApi(APIView):
@@ -84,6 +88,183 @@ class BlogViewsApi(APIView):
         data = blog_views_get_grouped_metrics(
             object_type=cast(Literal["country", "user"], validated_data["object_type"]),
             range_type=cast(Literal["month", "week", "year"], validated_data["range"]),
+            filters=filters,
+        )
+
+        output_serializer = self.OutputSerializer(data, many=True)
+
+        return Response(data=output_serializer.data, status=status.HTTP_200_OK)
+
+
+class TopApi(APIView):
+    class InputSerializer(serializers.Serializer):
+        top = serializers.ChoiceField(choices=["user", "country", "blog"], required=True)
+        start_date = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+        end_date = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+        filters = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
+    class OutputSerializer(serializers.Serializer):
+        x = serializers.IntegerField()
+        y = serializers.IntegerField()
+        z = serializers.IntegerField()
+
+    @swagger_auto_schema(
+        operation_summary="Get top ranked entities",
+        operation_description="Retrieve top 10 ranked entities (users, countries, or blogs) by view count.",
+        manual_parameters=[
+            openapi.Parameter(
+                "top",
+                openapi.IN_QUERY,
+                description="Type of entity to rank",
+                type=openapi.TYPE_STRING,
+                enum=["user", "country", "blog"],
+                required=True,
+            ),
+            openapi.Parameter(
+                "start_date",
+                openapi.IN_QUERY,
+                description="Start date for time range filter (ISO format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ)",
+                type=openapi.TYPE_STRING,
+                required=False,
+            ),
+            openapi.Parameter(
+                "end_date",
+                openapi.IN_QUERY,
+                description="End date for time range filter (ISO format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ)",
+                type=openapi.TYPE_STRING,
+                required=False,
+            ),
+            openapi.Parameter(
+                "filters",
+                openapi.IN_QUERY,
+                description="Optional JSON string for additional filters",
+                type=openapi.TYPE_STRING,
+                required=False,
+            ),
+        ],
+        responses={
+            200: openapi.Response(
+                description="Successfully retrieved top ranked entities",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            "x": openapi.Schema(type=openapi.TYPE_INTEGER, description="Metric x (varies by top type)"),
+                            "y": openapi.Schema(type=openapi.TYPE_INTEGER, description="Total views"),
+                            "z": openapi.Schema(type=openapi.TYPE_INTEGER, description="Metric z (varies by top type)"),
+                        },
+                    ),
+                ),
+            ),
+            400: openapi.Response(description="Bad request - Invalid parameters"),
+        },
+    )
+    def get(self, request):
+        input_serializer = self.InputSerializer(data=request.query_params)
+        input_serializer.is_valid(raise_exception=True)
+
+        validated_data = cast(dict[str, str | None], input_serializer.validated_data)
+
+        filters = None
+        filters_str = validated_data.get("filters")
+        if filters_str:
+            try:
+                filters = json.loads(filters_str)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError({"filters": "Invalid JSON format"})
+
+        data = top_get_ranked(
+            top_type=cast(Literal["user", "country", "blog"], validated_data["top"]),
+            start_date=validated_data.get("start_date"),
+            end_date=validated_data.get("end_date"),
+            filters=filters,
+        )
+
+        output_serializer = self.OutputSerializer(data, many=True)
+
+        return Response(data=output_serializer.data, status=status.HTTP_200_OK)
+
+
+class PerformanceApi(APIView):
+    class InputSerializer(serializers.Serializer):
+        compare = serializers.ChoiceField(choices=["day", "week", "month", "year"], required=True)
+        user_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+        filters = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
+    class OutputSerializer(serializers.Serializer):
+        x = serializers.CharField()
+        y = serializers.IntegerField()
+        z = serializers.FloatField()
+
+    @swagger_auto_schema(
+        operation_summary="Get time-series performance metrics",
+        operation_description="Retrieve time-series performance metrics with growth/decline percentages.",
+        manual_parameters=[
+            openapi.Parameter(
+                "compare",
+                openapi.IN_QUERY,
+                description="Time period for comparison",
+                type=openapi.TYPE_STRING,
+                enum=["day", "week", "month", "year"],
+                required=True,
+            ),
+            openapi.Parameter(
+                "user_id",
+                openapi.IN_QUERY,
+                description="Optional user ID to filter by specific user's blogs",
+                type=openapi.TYPE_STRING,
+                required=False,
+            ),
+            openapi.Parameter(
+                "filters",
+                openapi.IN_QUERY,
+                description="Optional JSON string for additional filters",
+                type=openapi.TYPE_STRING,
+                required=False,
+            ),
+        ],
+        responses={
+            200: openapi.Response(
+                description="Successfully retrieved performance metrics",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            "x": openapi.Schema(type=openapi.TYPE_STRING, description="Period label with blog count"),
+                            "y": openapi.Schema(type=openapi.TYPE_INTEGER, description="Total views for period"),
+                            "z": openapi.Schema(
+                                type=openapi.TYPE_NUMBER, description="Growth/decline percentage vs previous period"
+                            ),
+                        },
+                    ),
+                ),
+            ),
+            400: openapi.Response(description="Bad request - Invalid parameters"),
+        },
+    )
+    def get(self, request):
+        input_serializer = self.InputSerializer(data=request.query_params)
+        input_serializer.is_valid(raise_exception=True)
+
+        validated_data = cast(dict[str, str | None], input_serializer.validated_data)
+
+        filters = None
+        filters_str = validated_data.get("filters")
+        if filters_str:
+            try:
+                filters = json.loads(filters_str)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError({"filters": "Invalid JSON format"})
+
+        user_id = validated_data.get("user_id")
+        if user_id == "":
+            user_id = None
+
+        data = performance_get_time_series(
+            compare_type=cast(Literal["day", "week", "month", "year"], validated_data["compare"]),
+            user_id=user_id,
             filters=filters,
         )
 
